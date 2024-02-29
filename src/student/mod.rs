@@ -1,10 +1,10 @@
 use std::fmt;
-mod grade;
+pub mod grade;
 
 pub struct Student {
-    names: Vec<&'static str>,
-    email: &'static str,
-    grades: Vec<grade::Grades>,
+    pub names: Vec<&'static str>,
+    pub email: &'static str,
+    pub grades: Vec<grade::Grades>,
 }
 
 impl Student {
@@ -30,7 +30,7 @@ impl Student {
         self.grades.push(grade);
     }
 
-    pub fn get_grades(&self) -> Vec<(&'static str, u8)> {
+    pub fn grades_to_vec(&self) -> Vec<(&'static str, u8)> {
         let mut grades: Vec<(&'static str, u8)> = Vec::new();
 
         for i in &self.grades {
@@ -43,22 +43,41 @@ impl Student {
     }
 }
 
-// yet to implement the display method so cant be printed still geting my head arround this :)
-
+// Display Sturct used when used in a print macro or somthing alike.
 impl fmt::Display for Student {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let names: String = String::new();
+        let mut names: String = String::new();
 
-        for i in names {
-            names.push_str(format!("{}, ", i))
+        {
+            names.push_str("[");
+
+            for i in &self.names {
+                names.push_str(format!("{}, ", i).as_str());
+            }
+
+            names.replace_range((names.len() - 2).., "");
+
+            names.push_str("]");
+        }
+
+        let mut grade_str: String = String::new();
+
+        {
+            grade_str.push_str("[");
+
+            for i in &self.grades {
+                grade_str.push_str(format!("{}, ", i).as_str())
+            }
+
+            grade_str.replace_range((grade_str.len() - 2).., "");
+
+            grade_str.push_str("]");
         }
 
         write!(
             f,
-            "(names: {:?}, email: {}, grades: {:?})",
-            self.names,
-            self.email,
-            stringify!(self.grades)
+            "(names: {}, email: ({}), grades: {})",
+            names, self.email, grade_str
         )
     }
 }

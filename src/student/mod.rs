@@ -45,12 +45,20 @@ impl Student {
 
 // yet to implement the display method so cant be printed still geting my head arround this :)
 
-// impl fmt::Display for Student {
-//     fn fmt(&self, f: fmt::Formatter) -> fmt::Result {
-//         write!(
-//             f,
-//             "(names: {:?}, email: {}, grades: {:?})",
-//             self.names, self.email, self.grades
-//         )
-//     }
-// }
+impl fmt::Display for Student {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let names: String = String::new();
+
+        for i in names {
+            names.push_str(format!("{}, ", i))
+        }
+
+        write!(
+            f,
+            "(names: {:?}, email: {}, grades: {:?})",
+            self.names,
+            self.email,
+            stringify!(self.grades)
+        )
+    }
+}

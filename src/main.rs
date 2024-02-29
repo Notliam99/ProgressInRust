@@ -28,7 +28,7 @@ fn main() {
 
     let results = student_liam.get_grades();
 
-    println!("\n\n{:?}", student_liam);
+    println!("\n\n{}", student_liam);
 
     // execute!(stdout(), LeaveAlternateScreen)
     //     .expect("Uncaught Error: Couldnot Leave Alternate Screen");

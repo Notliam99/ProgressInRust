@@ -10,10 +10,11 @@ use std::{
     vec,
 };
 
-use progress_in_rust::student;
+// use progress_in_rust::student;
 
-fn names() -> Vec<String> {
-    let mut names: Vec<String> = vec![
+fn names() -> Vec<&'static str> {
+    let mut names: Vec<&str> = Vec::new();
+    let mut names_string: Vec<String> = vec![
         String::from("first name"),
         String::from("middle name"),
         String::from("lastname"),
@@ -21,17 +22,27 @@ fn names() -> Vec<String> {
 
     /*  let mut buffer = String::new(); */
 
-    for i in &mut names {
+    for i in names_string.iter_mut() {
+        let mut name: String = String::new();
+
         print!("Enter Your {} Bellow\n\n> ", i);
 
         stdout().flush().expect("Error: Couldnot flush term output");
 
         stdin()
-            .read_line(&mut *i)
+            .read_line(&mut name)
             .expect("Error: Cant Read Line From Console");
+
+        names.push(&name.as_str())
 
         /* let name: String = buffer; */
     }
+
+    // for i in names_string {
+    //     let to_str = i.as_str();
+    //
+    //     names.push(to_str)
+    // }
 
     names
 }

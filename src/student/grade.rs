@@ -1,13 +1,13 @@
 use std::fmt;
 
 pub struct Grades {
-    pub assesment_name: &'static str,
+    pub assesment_name: String,
     pub score: u8,
 }
 
 impl Grades {
-    pub fn get(&self) -> (&'static str, u8) {
-        (self.assesment_name, self.score)
+    pub fn get(&self) -> (String, u8) {
+        (self.assesment_name.clone(), self.score)
     }
 }
 

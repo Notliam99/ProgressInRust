@@ -2,7 +2,7 @@ use std::fmt;
 pub mod grade;
 
 pub struct Student {
-    pub names: Vec<&'static str>,
+    pub names: Vec<String>,
     pub email: &'static str,
     pub grades: Vec<grade::Grades>,
 }
@@ -16,12 +16,12 @@ impl Student {
         }
     }
 
-    pub fn user_details(&mut self, names: Option<Vec<&'static str>>, email: Option<&'static str>) {
+    pub fn user_details(&mut self, names: Option<Vec<String>>, email: Option<&'static str>) {
         self.names = names.unwrap_or(Vec::new());
         self.email = email.unwrap_or("");
     }
 
-    pub fn add_assesment(&mut self, assesment_name: &'static str, score: u8) {
+    pub fn add_assesment(&mut self, assesment_name: String, score: u8) {
         let grade: grade::Grades = grade::Grades {
             assesment_name: assesment_name,
             score: score,
@@ -30,8 +30,8 @@ impl Student {
         self.grades.push(grade);
     }
 
-    pub fn grades_to_vec(&self) -> Vec<(&'static str, u8)> {
-        let mut grades: Vec<(&'static str, u8)> = Vec::new();
+    pub fn grades_to_vec(&self) -> Vec<(String, u8)> {
+        let mut grades: Vec<(String, u8)> = Vec::new();
 
         for i in &self.grades {
             let value = i.get();
@@ -62,7 +62,7 @@ impl fmt::Display for Student {
 
         let mut grade_str: String = String::new();
 
-        {
+        if self.grades.len() != 0usize {
             grade_str.push_str("[");
 
             for i in &self.grades {
@@ -72,6 +72,8 @@ impl fmt::Display for Student {
             grade_str.replace_range((grade_str.len() - 2).., "");
 
             grade_str.push_str("]");
+        } else {
+            grade_str.push_str("[]");
         }
 
         write!(

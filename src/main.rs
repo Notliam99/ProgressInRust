@@ -10,41 +10,61 @@ use std::{
     vec,
 };
 
-// use progress_in_rust::student;
+use progress_in_rust::student::{grade::Grades, Student};
 
-fn names() -> Vec<&'static str> {
-    let mut names: Vec<&str> = Vec::new();
-    let mut names_string: Vec<String> = vec![
+fn names() -> Vec<String> {
+    let mut names: Vec<String> = vec![
         String::from("first name"),
         String::from("middle name"),
-        String::from("lastname"),
+        String::from("last name"),
     ];
 
-    /*  let mut buffer = String::new(); */
-
-    for i in names_string.iter_mut() {
-        let mut name: String = String::new();
-
+    for i in &mut names {
         print!("Enter Your {} Bellow\n\n> ", i);
 
         stdout().flush().expect("Error: Couldnot flush term output");
 
         stdin()
-            .read_line(&mut name)
+            .read_line(&mut *i)
             .expect("Error: Cant Read Line From Console");
 
-        names.push(&name.as_str())
-
-        /* let name: String = buffer; */
+        *i = i.trim().to_string()
     }
 
-    // for i in names_string {
-    //     let to_str = i.as_str();
-    //
-    //     names.push(to_str)
-    // }
-
     names
+}
+
+fn add_grade() -> Grades {
+    print!("Enter the name of the assesment\n\n> ");
+    stdout().flush().expect("Error: Couldnot flush term output");
+
+    let mut assesment_name: String = String::from("No Name Was Entered");
+
+    stdin()
+        .read_line(&mut assesment_name)
+        .expect("Error Cant Read Line From Console");
+
+    let mut assesment_score_temp: i64 = 111;
+    let mut assesment_score: String = String::new();
+
+    while { 0 > assesment_score_temp } && { assesment_score_temp > 100 } {
+        assesment_score = String::new();
+
+        print!("Enter the Score For The assesment\nScore Must Be Between 0 - 100\n\n> ");
+
+        stdout().flush().expect("Error: Couldnot flush term output");
+
+        stdin()
+            .read_line(&mut assesment_score)
+            .expect("Error Cant Read Line From Console");
+
+        assesment_score_temp = assesment_score.parse().unwrap();
+    }
+
+    Grades {
+        assesment_name: assesment_name,
+        score: assesment_score.parse().unwrap(),
+    }
 }
 
 fn main() {
@@ -53,34 +73,19 @@ fn main() {
 
     println!("Hello, world!");
 
-    let _names = names();
+    let names: Vec<String> = names();
 
-    // for i in _names {
-    // println!("{i}")
-    // }
+    let mut me = Student {
+        names: names.clone(),
+        email: "",
+        grades: Vec::new(),
+    };
 
-    println!("{:?}", _names);
+    me.grades.push(add_grade());
+
+    println!("{}", me);
 
     sleep(Duration::from_secs(5));
-
-    // let mut student_liam: student::Student = student::Student::new();
-    //
-    // student_liam.user_details(Some(vec!["first", "last"]), Some("wow@gmail.com"));
-    //
-    // let _results = student_liam.grades_to_vec();
-    //
-    // println!("\n\n{}", student_liam);
-    //
-    // let student_var: student::Student = student::Student {
-    //     names: vec!["0", "1", "2"],
-    //     email: "1",
-    //     grades: vec![student::grade::Grades {
-    //         assesment_name: "0",
-    //         score: 0,
-    //     }],
-    // };
-    //
-    // println!("{}", student_var);
 
     execute!(stdout(), LeaveAlternateScreen)
         .expect("Uncaught Error: Couldnot Leave Alternate Screen");

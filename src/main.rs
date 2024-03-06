@@ -81,6 +81,10 @@ fn add_grade() -> Grades {
     }
 }
 
+fn ask_if_loop() -> bool {
+    unimplemented!()
+}
+
 fn main() {
     execute!(stdout(), EnterAlternateScreen)
         .expect("Uncaught Error: Couldnot Leave Alternate Screen");
@@ -94,12 +98,17 @@ fn main() {
         email: "",
         grades: Vec::new(),
     };
+    loop {
+        me.grades.push(add_grade());
 
-    me.grades.push(add_grade());
+        println!("{}", me);
 
-    println!("{}", me);
+        sleep(Duration::from_secs(5));
 
-    sleep(Duration::from_secs(5));
+        if ask_if_loop() {
+            break;
+        }
+    }
 
     execute!(stdout(), LeaveAlternateScreen)
         .expect("Uncaught Error: Couldnot Leave Alternate Screen");

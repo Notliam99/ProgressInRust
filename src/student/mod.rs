@@ -23,8 +23,8 @@ impl Student {
 
     pub fn add_assesment(&mut self, assesment_name: String, score: u8) {
         let grade: grade::Grades = grade::Grades {
-            assesment_name: assesment_name,
-            score: score,
+            assesment_name,
+            score,
         };
 
         self.grades.push(grade);

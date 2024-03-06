@@ -1,14 +1,16 @@
 use crossterm::{
     execute,
-    terminal::{EnterAlternateScreen, LeaveAlternateScreen},
+    cursor,
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, Clear, ClearType},
 };
 
 use std::{
     io::{stdin, stdout, Write},
     thread::sleep,
-    time::Duration,
-    vec,
+    time::Duration, 
 };
+
+use ctrlc;
 
 use progress_in_rust::student::{grade::Grades, Student};
 
@@ -70,7 +72,7 @@ fn add_grade() -> Grades {
             .read_line(&mut _assesment_score_string)
             .expect("Error Cant Read Line From Console");
 
-        println!("{assesment_score}");
+        // println!("{assesment_score}");
 
         assesment_score = _assesment_score_string.trim().parse().unwrap_or(111);
     }
@@ -82,14 +84,43 @@ fn add_grade() -> Grades {
 }
 
 fn ask_if_loop() -> bool {
-    unimplemented!()
+    print!("Do You Want To Continue? [Y es / N o]\n\n> ");
+    stdout().flush().expect("Error: Couldnot flush term output");
+
+    let mut yay_or_nay: String = String::new();
+
+    stdin()
+        .read_line(&mut yay_or_nay)
+        .expect("Error Cant Read Line From Console");
+
+    // yay_or_nay = yay_or_nay.trim().to_string();
+
+    println!("{}", yay_or_nay.contains("y"));
+
+    if yay_or_nay.contains("y") || yay_or_nay.contains("Y") {
+        false
+    } else if yay_or_nay.contains("n") || yay_or_nay.contains("N") {
+        true
+    } else {
+        println!("Didnt Reconise Input So Continueing");
+        false
+    }
 }
 
 fn main() {
-    execute!(stdout(), EnterAlternateScreen)
-        .expect("Uncaught Error: Couldnot Leave Alternate Screen");
+    execute!(stdout(), EnterAlternateScreen, Clear(ClearType::All), cursor::MoveTo(0,0))
+        .expect("Uncaught Error: Couldnot Enter Alternate Screen");
 
-    println!("Hello, world!");
+    ctrlc::set_handler(move || {
+        execute!(stdout(), LeaveAlternateScreen)
+            .expect("Uncaught Error: Couldnot Leave Alternate Screen");
+        std::process::exit(1)
+    }).unwrap();
+
+    // execute!(stdout(), Clear(ClearType::All))
+        // .expect("Uncaught Error: Couldnot Enter Alternate Screen");
+    
+    /* println!("Hello, world!"); */
 
     let names: Vec<String> = names();
 
@@ -109,6 +140,8 @@ fn main() {
             break;
         }
     }
+
+    println!("{me}");
 
     execute!(stdout(), LeaveAlternateScreen)
         .expect("Uncaught Error: Couldnot Leave Alternate Screen");

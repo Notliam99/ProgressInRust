@@ -6,7 +6,7 @@
 use std::io::{stdin, stdout, Write};
 
 pub fn ask_if_loop() -> bool {
-    print!("Do You Want To Continue? [Y es / N o]\n\n> ");
+    print!(" [Y es / N o]\n\n> ");
     stdout()
         .flush()
         .expect("Error: Could Not Flush Terminal Output");

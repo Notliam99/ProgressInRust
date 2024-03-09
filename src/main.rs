@@ -3,7 +3,7 @@ use crossterm::{
     terminal::{Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen},
 };
 
-use std::{io::stdout, thread::sleep, time::Duration};
+use std::{io::stdout};
 
 use ctrlc;
 
@@ -28,27 +28,42 @@ fn main() {
     })
     .unwrap();
 
-    let names: Vec<String> = names();
+    let mut students: Vec<Student> = Vec::new(); 
 
-    let mut me = Student {
-        names: names.clone(),
-        email: "",
-        grades: Vec::new(),
-    };
     loop {
-        me.grades.push(add_grade());
+        let names: Vec<String> = names();
 
-        println!("{}", me);
+        let mut _student = Student {
+            names: names.clone(),
+            email: "",
+            grades: Vec::new(),
+        };
 
-        sleep(Duration::from_secs(5));
+        loop {
+            _student.grades.push(add_grade());
+
+            println!("{}", _student);
+            
+            print!("Add Another Grade");
+
+            if ask_if_loop() {
+                break;
+            }
+        }
+
+        students.push(_student);
+        
+        print!("Add Another User");
 
         if ask_if_loop() {
             break;
         }
     }
 
-    println!("{me}");
-
     execute!(stdout(), LeaveAlternateScreen)
         .expect("Uncaught Error: Couldnot Leave Alternate Screen");
+
+    for student in students {
+        println!("{student}");
+    }
 }
